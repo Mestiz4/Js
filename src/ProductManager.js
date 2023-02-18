@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 
 class Product {
@@ -14,9 +14,9 @@ class Product {
   }
 
 
-class ProductManager {
-    constructor(archivo){
-        this.path= archivo;
+  export default class ProductManager {
+    constructor(path){
+        this.path= path;
     }
 
     async getProducts(){
@@ -64,7 +64,7 @@ class ProductManager {
           products[productIndex].img = img;
           products[productIndex].code = code;
           products[productIndex].stock = stock;
-          await fs.promises.writeFile(this.path, JSON.stringify(products,null,2));
+          await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
           console.log(`Product ${name} with ID ${id} updated successfully`);
         } else {
           console.log("Product not found.");
@@ -83,7 +83,7 @@ class ProductManager {
               let id = products.length + 1;
               let newProduct = new Product(id, name, description, price, img, code, stock);
               products.push(newProduct);
-              await fs.promises.writeFile(this.path, JSON.stringify(products,null,2));
+              await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
               console.log(`Product ${name} added with ID ${id}`);
             }
           }
@@ -92,4 +92,10 @@ class ProductManager {
 
 let pm = new ProductManager("../files/products.json");
 
+
+
 // pm.addProduct("Libro2", "Este es un libro de arte", 200, "pin.png", "def123", 12);
+// pm.getProducts().then(products => console.log(products));
+// pm.getProductById(1).then(product => console.log(product));
+// pm.updateProduct();
+// pm.deleteProduct();
