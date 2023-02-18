@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Libro1",
+    "description": "Este es un libro",
+    "price": 200,
+    "img": "xxx.png",
+    "code": "abc123",
+    "stock": 25
+  },
+  {
+    "id": 2,
+    "name": "Libro2",
+    "description": "Este es un libro de arte",
+    "price": 200,
+    "img": "pin.png",
+    "code": "def123",
+    "stock": 12
+  }
+]
