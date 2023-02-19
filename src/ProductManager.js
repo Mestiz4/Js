@@ -1,4 +1,5 @@
 import fs from "fs";
+import { v4 as newID } from "uuid";
 
 
 class Product {
@@ -45,7 +46,7 @@ class Product {
         let productIndex = products.findIndex((product) => product.id === id);
         let productExists = productIndex !== -1;
         if (productExists) {
-          products[productIndex] = {};
+          products.splice(productIndex,1);
           await fs.promises.writeFile(this.path, JSON.stringify(products,null,2));
           console.log(`Product with ID ${id} deleted successfully`);
         } else {
@@ -80,7 +81,7 @@ class Product {
             if (productExists || aFieldIsEmpty) {
               console.log(`Product not added.\nErrors:${productExists ? "\nProduct already exists." : ""} ${aFieldIsEmpty ? "\nMust complete all fields." : ""}`);
             } else {
-              let id = products.length + 1;
+              let id = newID();
               let newProduct = new Product(id, name, description, price, img, code, stock);
               products.push(newProduct);
               await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
@@ -94,7 +95,7 @@ let pm = new ProductManager("../files/products.json");
 
 
 
-// pm.addProduct("Libro2", "Este es un libro de arte", 200, "pin.png", "def123", 12);
+pm.addProduct("Libro2", "Este es un libro de filodofía", 500, "philo.png", "ghi123", 12);
 // pm.getProducts().then(products => console.log(products));
 // pm.getProductById(1).then(product => console.log(product));
 // pm.updateProduct();
