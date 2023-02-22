@@ -1,0 +1,46 @@
+[
+  {
+    "id": "71817510-55ae-49cd-8d67-363b51453773",
+    "name": "Pulpa de Mango",
+    "description": "Deliciosa pulpa de mango pasteurizada",
+    "price": 20,
+    "status": true,
+    "category": "pulpa",
+    "img": "pmango.png",
+    "code": "P1",
+    "stock": 10
+  },
+  {
+    "id": "c2bebc11-2f80-410f-ab9e-aa6046e2e976",
+    "name": "Pulpa de Lulo",
+    "description": "Deliciosa pulpa de lulo pasteurizada",
+    "price": 20,
+    "status": true,
+    "category": "pulpa",
+    "img": "plulo.png",
+    "code": "P2",
+    "stock": 10
+  },
+  {
+    "id": "b8a769e4-d7dd-40b5-aabb-e8673a0adc8f",
+    "name": "Yuca en trozos",
+    "description": "Yuca precocida.",
+    "price": 25,
+    "status": true,
+    "category": "tuberculos",
+    "img": "tyuca.png",
+    "code": "T1",
+    "stock": 15
+  },
+  {
+    "id": "6317909a-180c-4b86-9acd-d46ad74bc6ee",
+    "name": "Patacones",
+    "description": "Patacones precocidos",
+    "price": 25,
+    "status": false,
+    "category": "tuberculos",
+    "img": "patacones.png",
+    "code": "T2",
+    "stock": 15
+  }
+]
