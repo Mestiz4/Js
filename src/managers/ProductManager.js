@@ -99,13 +99,8 @@ class Product {
         let { name, description, code, price, status, stock, category, img } = req.body;
         let products = await this.getProducts();
         let productExists = products.findIndex((product) => product.code === code) !== -1;
-        let aFieldIsEmpty = !(name && description && code && price && stock && category);
-        if (productExists || aFieldIsEmpty) {
-          res.status(400).json({
-            error: `Producto no incluido. Errores:${productExists ? " El producto ya existe." : ""}${
-              aFieldIsEmpty ? " Complete todos los campos." : ""
-            }`,
-          });
+        if (productExists ) {
+          return res.status(400).json({ error: 'Product not added. Error: Code already exists.' });
         } else {
           price = Number(price);
           stock = Number(stock);

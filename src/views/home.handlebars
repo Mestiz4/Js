@@ -1,0 +1,13 @@
+<h1>Products</h1>
+{{#each products}}
+  <div>
+    <h2>{{this.name}}</h2>
+    <p>{{this.description}}</p>
+    {{#if status}}
+      <p>Disponible</p>
+    {{else}}
+      <p>No está disponible</p>
+    {{/if}}
+  </div>
+{{/each}}
+<script src="/js/home.js"></script>

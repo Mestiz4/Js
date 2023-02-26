@@ -1,5 +1,9 @@
 import fs from "fs";
 import { v4 as newID } from "uuid";
+import { __dirname } from "../helpers/utils.js"; 
+import ProductManager from "./ProductManager.js"; 
+
+const pm = new ProductManager(`${__dirname}/files/products.json`); 
 
 class Cart {
   constructor(id, carrito, products = []) {
@@ -34,10 +38,10 @@ export default class CartManager {
 
   async addCart(req, res) {
     res.setHeader("Content-Type", "application/json");
-    let carts = await this.getCarts();
+    let cart = await this.getCarts();
     let newCart = new Cart(newID(), req.query.carrito);
-    carts.push(newCart);
-    await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2));
+    cart.push(newCart);
+    await fs.promises.writeFile(this.path, JSON.stringify(cart, null, 2));
     res.status(201).json({ message: `Carrito creado` });
   }
 
@@ -57,6 +61,14 @@ export default class CartManager {
     let carts = await this.getCarts();
     let cartIndex = carts.findIndex((cart) => cart.id === req.params.cid);
     let cartExists = cartIndex !== -1;
+    let productos=await pm.getProducts();
+    let indiceProducto=productos.findIndex(p=>p.id==req.params.pid);
+    if (indiceProducto==-1){   
+      res.setHeader('Content-Type','application/json');
+      return res.status(400).json({
+        message:`El producto con id ${req.params.pid} no existe en la base de datos`
+      })
+    } 
     if (cartExists) {
       let prodIndex = carts[cartIndex].products.findIndex((item) => item.product === req.params.pid);
       let prodExists = prodIndex !== -1;
