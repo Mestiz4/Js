@@ -15,8 +15,8 @@ router.get("/:pid", (req, res) => pm.getProductById(req, res));
 
 router.post('/', (req, res, next) => {
   res.setHeader("Content-Type", "application/json");
-  let { title, description, code, price, status, stock, category } = req.body;
-  let aFieldIsEmpty = !(title && description && code && price && stock && category);
+  let { name, description, code, price, status, stock, category } = req.body;
+  let aFieldIsEmpty = !(name && description && code && price && stock && category);
   if (aFieldIsEmpty) {
     return res.status(400).json({ error: "Product not added. Error: must complete all required fields" });
   }
