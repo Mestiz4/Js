@@ -63,7 +63,7 @@ serverSockets.on("connection", async (socket) => {
 
 const connect = async () => {
   try {
-    await mongoose.connect("mongodb+srv://admin01:Rafa1234@cluster0.pfcfkjg.mongodb.net/?retryWrites=true&w=majority&dbName=ecommerce");
+    await mongoose.connect("Aquí va la DB");
     console.log("DB connection success");
   } catch (error) {
     console.log(`DB connection fail. Error: ${error}`);
