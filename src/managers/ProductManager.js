@@ -100,7 +100,7 @@ class Product {
         let products = await this.getProducts();
         let productExists = products.findIndex((product) => product.code === code) !== -1;
         if (productExists ) {
-          return res.status(400).json({ error: 'Product not added. Error: Code already exists.' });
+          return res.status(400).json({ error: 'Producto no añadido. Error: el código ya existe.' });
         } else {
           price = Number(price);
           stock = Number(stock);
@@ -114,13 +114,3 @@ class Product {
       }
 }
 
-
-//let pm = new ProductManager("../files/products.json");
-
-
-
-//pm.addProduct("Libro1", "Este es un libro", "", );
-// pm.getProducts().then(products => console.log(products));
-// pm.getProductById(1).then(product => console.log(product));
-// pm.updateProduct();
-//pm.deleteProduct("a88a5648-785f-462c-b623-74fdb0f6ce18");

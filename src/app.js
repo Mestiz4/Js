@@ -6,26 +6,32 @@ import { __dirname } from "./helpers/utils.js";
 import viewsRouter from "./routes/views.router.js";
 import { Server } from "socket.io";
 import ProductManager from "./managers/ProductManager.js";
+import mongoose from "mongoose";
+import path from "path";
+import cartsDBRouter from "./routes/cartsDB.router.js";
+import { messagesModel } from "./dbmodels/models/messages.model.js";
 
 const app = express();
 const port = 8080;
-const pm = new ProductManager(`${__dirname}/files/products.json`);
+const pm = new ProductManager(path.join(__dirname, "../files/products.json"));
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
-app.set("views", `${__dirname}/views`);
+app.set("views", path.join(__dirname,"../views"));
 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(__dirname +'/public'))
+app.use(express.static(path.join(__dirname, "../public")));
 
 app.use("/", viewsRouter);
 
 app.use("/api/products", productsRouter);
 
 app.use("/api/cart", cartRouter);
+
+app.use("/api/cartsDB", cartsDBRouter);
 
 const httpServer = app.listen(port, () => {
   console.log(`App listening on port ${port}`);
@@ -48,4 +54,22 @@ serverSockets.on("connection", async (socket) => {
     let response = await pm.addProductSocket(product);
     socket.emit("addProductRes", response);
   });
+
+  socket.on("newMessage", async ({ user, message }) => {
+    await messagesModel.create({ user: user, message: message });
+    io.emit("messagesListUpdated");
+  })
 });
+
+const connect = async () => {
+  try {
+    await mongoose.connect("mongodb+srv://admin01:Rafa1234@cluster0.pfcfkjg.mongodb.net/?retryWrites=true&w=majority&dbName=ecommerce");
+    console.log("DB connection success");
+  } catch (error) {
+    console.log(`DB connection fail. Error: ${error}`);
+  }
+}
+
+connect();
+
+serverSockets.on("error", (error) => console.error(error));

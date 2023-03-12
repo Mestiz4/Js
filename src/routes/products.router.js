@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { __dirname } from "../helpers/utils.js";
 import ProductManager from "../managers/ProductManager.js";
+import path from "path";
 
 const router = Router();
-const pm = new ProductManager(`${__dirname}/files/products.json`);
+const pm = new ProductManager(path.join(__dirname, "../files/products.json"));
 
 router.get("/", async (req, res) => {
   let products = await pm.getProducts(req.query.limit);
