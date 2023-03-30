@@ -1,4 +1,4 @@
-const socket = socket();
+const socket = io();
 
 let user = JSON.parse(sessionStorage.getItem("user")) || prompt("Ingrese correo electrónico:");
 sessionStorage.setItem("user", JSON.stringify(user));

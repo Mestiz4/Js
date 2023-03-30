@@ -32,15 +32,8 @@ const productsSchema = new Schema({
     type: String,
     required: true,
   },
-  thumbnails: [String],
-  user: {
-    type: String,
-    required: true,
-  },
-  product: {
-    type: String,
-    required: true,
-  },
+  img: [String],
+  
 });
 
 export const productsModel = model(productsCollection, productsSchema);

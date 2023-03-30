@@ -42,5 +42,27 @@
     "img": "patacones.png",
     "code": "T2",
     "stock": 15
+  },
+  {
+    "id": "ea87433d-9464-4039-b12e-3ce47ab567c7",
+    "name": "Sancocho",
+    "description": "Sopa precocida",
+    "price": 25,
+    "status": true,
+    "category": "tuberculos",
+    "img": "sancocho.png",
+    "code": "T3",
+    "stock": 15
+  },
+  {
+    "id": "6f2b834a-439c-43fd-ad07-4d645fd277d5",
+    "name": "Changua",
+    "description": "Sopa precocida",
+    "price": 25,
+    "status": true,
+    "category": "tuberculos",
+    "img": "changua.png",
+    "code": "T4",
+    "stock": 15
   }
 ]

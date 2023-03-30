@@ -3,9 +3,9 @@ import { v4 as newID } from "uuid";
 
 
 class Product {
-    constructor(id, name, description, price, status = true, category , img, code, stock) {
+    constructor(id, title, description, price, status = true, category , img, code, stock) {
       this.id = id;
-      this.name = name;
+      this.title = title;
       this.description = description;
       this.price = price;
       this.status = status;
@@ -17,7 +17,7 @@ class Product {
   }
 
 
-  export default class ProductManager {
+  export default class ProductManagerFS {
     constructor(path){
         this.path= path;
     }
@@ -62,7 +62,7 @@ class Product {
       async updateProduct(req, res) {
         res.setHeader("Content-Type", "application/json");
         let id = req.params.pid;
-        let { name, description, price, status, category , img, code, stock } = req.body;
+        let { title, description, price, status, category , img, code, stock } = req.body;
         let products = await this.getProducts();
         let indexByID = products.findIndex((product) => product.id === id);
         let productExists = indexByID !== -1;
@@ -76,7 +76,7 @@ class Product {
             stock = Number(stock);
             status === "false" && (products[indexByID].status = false);
             status === "true" && (products[indexByID].status = true);
-            title && (products[indexByID].name = name);
+            title && (products[indexByID].title = title);
             description && (products[indexByID].description = description);
             code && (products[indexByID].code = code);
             price && (products[indexByID].price = price);
@@ -96,20 +96,65 @@ class Product {
 
       async addProduct(req, res) {
         res.setHeader("Content-Type", "application/json");
-        let { name, description, code, price, status, stock, category, img } = req.body;
+        let { title, description, code, price, status, stock, category, img } = req.body;
         let products = await this.getProducts();
         let productExists = products.findIndex((product) => product.code === code) !== -1;
         if (productExists ) {
           return res.status(400).json({ error: 'Producto no añadido. Error: el código ya existe.' });
         } else {
-          price = Number(price);
-          stock = Number(stock);
-          status === "false" ? (status = false) : (status = true);
           let id = newID();
-          let newProduct = new Product(id, name, description, price, status, category , img, code, stock);
+          let newProduct = new Product(id, title, description, price, status, category , img, code, stock);
           products.push(newProduct);
           await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
           res.status(201).json({ message: `Producto añadido` });
+
+          
+        }
+      }
+
+      async deleteProductSocket(id) {
+        let products = await this.getProducts();
+        let productIndex = products.findIndex((product) => product.id === id);
+        let productExists = productIndex !== -1;
+        if (productExists) {
+          products.splice(productIndex, 1);
+          await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
+          return {
+            success: true,
+            message: "Producto eliminado",
+          };
+        } else {
+          return {
+            success: false,
+            message: "Producto no encontrado",
+          };
+        }
+      }
+
+      async addProductSocket(product) {
+        let { title, description, code, price, status, stock, category, thumbnails } = product;
+        let products = await this.getProducts();
+        let productExists = products.findIndex((product) => product.code === code) !== -1;
+        let aFieldIsEmpty = !(title && description && code && price && stock && category);
+        if (productExists || aFieldIsEmpty) {
+          return {
+            success: false,
+            message: `Producto no añadido. Errors:${productExists ? " El producto ya existe." : ""}${
+              aFieldIsEmpty ? " Por favor complete todos los campos." : ""
+            }`,
+          };
+        } else {
+          price = Number(price);
+          stock = Number(stock);
+          status === "false" ? (status = false) : (status = true);
+          let id = createID();
+          let newProduct = new Product(id, title, description, code, price, status, stock, category, thumbnails);
+          products.push(newProduct);
+          await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
+          return {
+            success: true,
+            message: "Producto añadido",
+          };
         }
       }
 }

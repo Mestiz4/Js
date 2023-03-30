@@ -1,9 +1,9 @@
 import fs from "fs";
 import { v4 as newID } from "uuid";
-import { __dirname } from "../helpers/utils.js"; 
-import ProductManager from "./ProductManager.js"; 
+import { __dirname } from "../utils/utils.js"; 
+import ProductManagerFS from "../dao/ProductManagerFS.js"; 
 
-const pm = new ProductManager(`${__dirname}/files/products.json`); 
+const pm = new ProductManagerFS(`${__dirname}/files/products.json`); 
 
 class Cart {
   constructor(id, carrito, products = []) {
@@ -20,7 +20,7 @@ class CartItem {
   }
 }
 
-export default class CartManager {
+export default class CartManagerFS {
   constructor(path) {
     this.path = path;
   }

@@ -1,19 +1,20 @@
 import express from "express";
 import { engine } from "express-handlebars";
-import productsRouter from "./routes/products.router.js";
-import cartRouter from "./routes/cart.router.js";
-import { __dirname } from "./helpers/utils.js";
+import { __dirname } from "./utils/utils.js";
 import viewsRouter from "./routes/views.router.js";
 import { Server } from "socket.io";
-import ProductManager from "./managers/ProductManager.js";
+import ProductManagerFS from "./dao/productManagerFS.js";
 import mongoose from "mongoose";
 import path from "path";
+import productsFSRouter from "./routes/products.router.js";
+import cartsFSRouter from "./routes/cart.router.js";
 import cartsDBRouter from "./routes/cartsDB.router.js";
-import { messagesModel } from "./dbmodels/models/messages.model.js";
+import productsDBRouter from "./routes/productsDB.router.js";
+import { messagesModel } from "./dao/models/messages.model.js";
 
 const app = express();
 const port = 8080;
-const pm = new ProductManager(path.join(__dirname, "../files/products.json"));
+const pm = new ProductManagerFS(path.join(__dirname, "../files/products.json"));
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
@@ -27,11 +28,13 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 app.use("/", viewsRouter);
 
-app.use("/api/products", productsRouter);
+app.use("/api/productsFS", productsFSRouter);
 
-app.use("/api/cart", cartRouter);
+app.use("/api/cartsFS", cartsFSRouter)
 
 app.use("/api/cartsDB", cartsDBRouter);
+
+app.use("/api/productsDB", productsDBRouter);
 
 const httpServer = app.listen(port, () => {
   console.log(`App listening on port ${port}`);
@@ -57,16 +60,16 @@ serverSockets.on("connection", async (socket) => {
 
   socket.on("newMessage", async ({ user, message }) => {
     await messagesModel.create({ user: user, message: message });
-    io.emit("messagesListUpdated");
+    socket.emit("messagesListUpdated");
   })
 });
 
 const connect = async () => {
   try {
-    await mongoose.connect("Aquí va la DB");
-    console.log("DB connection success");
+    await mongoose.connect("mongodb+srv://mestiz4:coderhouse@cluster0.bmj5i9t.mongodb.net/?retryWrites=true&w=majority&dbName=ecommerce");
+    console.log("Conexión a DB establecida");
   } catch (error) {
-    console.log(`DB connection fail. Error: ${error}`);
+    console.log(`Error al conectarse con la DB. Error: ${error}`);
   }
 }
 
